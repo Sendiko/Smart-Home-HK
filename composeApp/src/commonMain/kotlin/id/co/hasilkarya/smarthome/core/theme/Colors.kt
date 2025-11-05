@@ -1,4 +1,4 @@
-package id.co.hasilkarya.smarthome.smarthomehasilkarya.core.theme
+package id.co.hasilkarya.smarthome.core.theme
 
 import androidx.compose.ui.graphics.Color
 
