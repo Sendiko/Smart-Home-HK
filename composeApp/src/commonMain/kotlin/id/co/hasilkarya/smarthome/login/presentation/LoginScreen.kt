@@ -36,6 +36,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import smarthomehasilkarya.composeapp.generated.resources.Res
 import smarthomehasilkarya.composeapp.generated.resources.app_name
 import smarthomehasilkarya.composeapp.generated.resources.email
+import smarthomehasilkarya.composeapp.generated.resources.email_hint
 import smarthomehasilkarya.composeapp.generated.resources.email_icon
 import smarthomehasilkarya.composeapp.generated.resources.forgot_password
 import smarthomehasilkarya.composeapp.generated.resources.image
@@ -43,9 +44,15 @@ import smarthomehasilkarya.composeapp.generated.resources.lock
 import smarthomehasilkarya.composeapp.generated.resources.lock_icon
 import smarthomehasilkarya.composeapp.generated.resources.login_header
 import smarthomehasilkarya.composeapp.generated.resources.login_subheader
+import smarthomehasilkarya.composeapp.generated.resources.login_text
+import smarthomehasilkarya.composeapp.generated.resources.password_hint
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    state: LoginState,
+    onEvent: (LoginEvent) -> Unit,
+) {
     Column(
         modifier = modifier.padding(16.dp).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,9 +89,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             ) {
                 CustomTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = {  },
-                    hint = "Email",
+                    value = state.email,
+                    onValueChange = { onEvent(LoginEvent.OnEmailChanged(it)) },
+                    hint = stringResource(Res.string.email_hint),
                     leadingIcon = {
                         Icon(
                             modifier = Modifier.size(24.dp),
@@ -95,11 +102,11 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 )
                 SecureTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = {  },
-                    onVisibilityChange = {  },
-                    hint = "Password",
-                    isVisible = true,
+                    value = state.password,
+                    onValueChange = { onEvent(LoginEvent.OnPasswordChanged(it)) },
+                    onVisibilityChange = { onEvent(LoginEvent.OnPasswordVisibilityChanged(it)) },
+                    hint = stringResource(Res.string.password_hint),
+                    isVisible = state.isPasswordVisible,
                     leadingIcon = {
                         Icon(
                             modifier = Modifier.size(24.dp),
@@ -123,8 +130,8 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 }
                 PrimaryButton(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {  },
-                    text = "Login"
+                    onClick = { onEvent(LoginEvent.OnLoginClick) },
+                    text = stringResource(Res.string.login_text)
                 )
             }
         }
@@ -135,6 +142,9 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 @Composable
 fun LoginScreenPreview() {
     SmartHomeTheme {
-        LoginScreen()
+        LoginScreen(
+            state = LoginState(),
+            onEvent = {  }
+        )
     }
 }
