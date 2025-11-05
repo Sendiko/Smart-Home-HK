@@ -5,8 +5,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.lifecycle.viewmodel.compose.viewModel
 import id.co.hasilkarya.smarthome.core.theme.BrokenWhite
 import id.co.hasilkarya.smarthome.core.theme.SmartHomeTheme
+import id.co.hasilkarya.smarthome.login.presentation.LoginScreen
+import id.co.hasilkarya.smarthome.login.presentation.LoginViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -17,14 +20,11 @@ import smarthomehasilkarya.composeapp.generated.resources.app_name
 @Preview
 fun App() {
     SmartHomeTheme {
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = stringResource(Res.string.app_name),
-                style = MaterialTheme.typography.displayLarge,
-                color = BrokenWhite,
-            )
-        }
+        val viewModel = viewModel<LoginViewModel>()
+        val state by viewModel.state.collectAsState()
+        LoginScreen(
+            state = state,
+            onEvent = viewModel::onEvent
+        )
     }
 }
