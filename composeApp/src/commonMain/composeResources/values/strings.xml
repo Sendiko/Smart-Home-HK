@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">RumahCerdas</string>
+    <string name="clear_field">Clear TextField</string>
+    <string name="email_icon">Email Icon</string>
+    <string name="lock_icon">Lock Icon</string>
+    <string name="password_visible">Password is currently visible</string>
+    <string name="password_not_visible">Password is not currently visible</string>
+
+    <!--  Login Strings  -->
+    <string name="login_header">Masuk RumahCerdas</string>
+    <string name="login_subheader">Mudahkan aktivitasmu dengan RumahCerdas</string>
+    <string name="forgot_password">Lupa Password?</string>
 </resources>
