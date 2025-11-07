@@ -58,6 +58,7 @@ kotlin {
 
             /* Serialization Json */
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.serialization.core)
 
             /* Koin */
             implementation(libs.koin.compose.viewmodel)
