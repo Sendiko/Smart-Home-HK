@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +43,7 @@ import id.co.hasilkarya.smarthome.core.theme.SmartHomeTheme
 import id.co.hasilkarya.smarthome.login.presentation.components.CustomTextField
 import id.co.hasilkarya.smarthome.login.presentation.components.PrimaryButton
 import id.co.hasilkarya.smarthome.login.presentation.components.SecureTextField
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -64,9 +66,17 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     state: LoginState,
     onEvent: (LoginEvent) -> Unit,
+    onNavigate: () -> Unit
 ) {
     val focusRequesterPassword = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            delay(2000)
+            onNavigate()
+        }
+    }
 
     Box {
         AnimatedVisibility(
@@ -186,7 +196,8 @@ fun LoginScreenPreview() {
     SmartHomeTheme {
         LoginScreen(
             state = LoginState(),
-            onEvent = { }
+            onEvent = { },
+            onNavigate = {  }
         )
     }
 }
