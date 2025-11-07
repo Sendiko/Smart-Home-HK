@@ -65,6 +65,7 @@ class LoginViewModel(
                     it.copy(
                         isLoading = false,
                         isError = false,
+                        isSuccess = true,
                         message = UiText.DynamicString(getString(Res.string.login_success))
                     )
                 }
