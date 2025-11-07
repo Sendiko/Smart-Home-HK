@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -58,6 +57,7 @@ kotlin {
 
             /* Serialization Json */
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.serialization.core)
 
             /* Koin */
             implementation(libs.koin.compose.viewmodel)
