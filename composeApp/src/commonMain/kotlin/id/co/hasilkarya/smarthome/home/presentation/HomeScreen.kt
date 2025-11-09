@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import id.co.hasilkarya.smarthome.core.presentation.CustomLoadingNotification
+import id.co.hasilkarya.smarthome.core.presentation.CustomNotification
 import id.co.hasilkarya.smarthome.core.theme.BrokenWhite
 import id.co.hasilkarya.smarthome.core.theme.DarkBlue
 import id.co.hasilkarya.smarthome.core.theme.SmartHomeTheme
@@ -93,6 +94,18 @@ fun HomeScreen(
                     end = 16.dp,
                 ),
             ) {
+                if (state.isError) {
+                    item {
+                        AnimatedVisibility(
+                            state.isError && state.message.asComposableString().isNotEmpty()
+                        ) {
+                            CustomNotification(
+                                isError = state.isError,
+                                data = state.message.asComposableString()
+                            )
+                        }
+                    }
+                }
                 item {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -136,7 +149,10 @@ fun HomeScreen(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxHeight(),
-                            device = devicePair.first()
+                            device = devicePair.first(),
+                            onToggle = { device, property, value ->
+                                onEvent(HomeEvent.OnDeviceToggle(device, property, value))
+                            }
                         )
 
                         if (devicePair.size > 1) {
@@ -144,7 +160,10 @@ fun HomeScreen(
                                 modifier = Modifier
                                     .weight(1f)
                                     .fillMaxHeight(),
-                                device = devicePair.last()
+                                device = devicePair.last(),
+                                onToggle = { device, property, value ->
+                                    onEvent(HomeEvent.OnDeviceToggle(device, property, value))
+                                }
                             )
                         } else {
                             Spacer(Modifier.weight(1f))

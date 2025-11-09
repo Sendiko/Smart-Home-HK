@@ -6,6 +6,7 @@ import id.co.hasilkarya.smarthome.core.network.utils.onError
 import id.co.hasilkarya.smarthome.core.network.utils.onSuccess
 import id.co.hasilkarya.smarthome.core.presentation.asUiText
 import id.co.hasilkarya.smarthome.home.domain.HomeRepository
+import id.co.hasilkarya.smarthome.home.domain.models.Device
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -22,7 +23,22 @@ class HomeViewModel(
     fun onEvent(event: HomeEvent) {
         when (event) {
             HomeEvent.OnLoadData -> loadData()
-            is HomeEvent.OnDeviceToggle -> TODO()
+            is HomeEvent.OnDeviceToggle -> updateDevice(event.device, event.property, event.value)
+        }
+    }
+
+    private fun updateDevice(device: Device, property: String, value: String) {
+        val propertyMutable = device.properties.toMutableMap()
+        propertyMutable[property] = value
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            repository.updateDevice(id = device.id, token = state.value.token, request = propertyMutable)
+                .onSuccess { _ ->
+                    loadData()
+                }
+                .onError { error ->
+                    _state.update { it.copy(isLoading = false, isError = true, message = error.asUiText()) }
+                }
         }
     }
 

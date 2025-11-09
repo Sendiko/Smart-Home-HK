@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import id.co.hasilkarya.smarthome.core.theme.BrokenWhite
@@ -34,7 +33,8 @@ const val STATE_CLOSED_KEY = "closed"
 @Composable
 fun DeviceCard(
     modifier: Modifier = Modifier,
-    device: Device
+    device: Device,
+    onToggle: (device: Device, property: String, value: String) -> Unit,
 ) {
     Card(
         modifier = modifier.fillMaxHeight(),
@@ -101,7 +101,16 @@ fun DeviceCard(
                 Switch(
                     modifier = Modifier.height(16.dp),
                     checked = device.properties["state"] == STATE_ON_KEY || device.properties["state"] == STATE_OPEN_KEY,
-                    onCheckedChange = { },
+                    onCheckedChange = {
+                        val newState = when (device.properties["state"]) {
+                            STATE_ON_KEY -> STATE_OFF_KEY
+                            STATE_OFF_KEY -> STATE_ON_KEY
+                            STATE_OPEN_KEY -> STATE_CLOSED_KEY
+                            STATE_CLOSED_KEY -> STATE_OPEN_KEY
+                            else -> STATE_OFF_KEY
+                        }
+                        onToggle(device, "state", newState)
+                    },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = DarkBlue,
                         checkedTrackColor = BrokenWhite,
@@ -114,7 +123,7 @@ fun DeviceCard(
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun DeviceCardPreview() {
     SmartHomeTheme {
@@ -129,7 +138,8 @@ fun DeviceCardPreview() {
                 home = Home(id = 1, name = "Rumah Keluarga Bahagia"),
                 properties = mapOf("state" to STATE_OFF_KEY),
                 uiConfig = mapOf("icon" to LAMP_ICON_KEY)
-            )
+            ),
+            onToggle = { _, _, _ -> }
         )
     }
 }
