@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import id.co.hasilkarya.smarthome.core.navigation.data.DeviceDestination
 import id.co.hasilkarya.smarthome.core.presentation.CustomLoadingNotification
 import id.co.hasilkarya.smarthome.core.presentation.CustomNotification
 import id.co.hasilkarya.smarthome.core.theme.BrokenWhite
@@ -33,6 +34,7 @@ import kotlin.time.ExperimentalTime
 fun HomeScreen(
     state: HomeState,
     onEvent: (HomeEvent) -> Unit,
+    onNavigate: (Int?) -> Unit,
 ) {
 
     LaunchedEffect(state.token) {
@@ -152,7 +154,8 @@ fun HomeScreen(
                             device = devicePair.first(),
                             onToggle = { device, property, value ->
                                 onEvent(HomeEvent.OnDeviceToggle(device, property, value))
-                            }
+                            },
+                            onClick = { onNavigate(devicePair.first().id) }
                         )
 
                         if (devicePair.size > 1) {
@@ -163,7 +166,8 @@ fun HomeScreen(
                                 device = devicePair.last(),
                                 onToggle = { device, property, value ->
                                     onEvent(HomeEvent.OnDeviceToggle(device, property, value))
-                                }
+                                },
+                                onClick = { onNavigate(devicePair[1].id) }
                             )
                         } else {
                             Spacer(Modifier.weight(1f))
@@ -188,7 +192,8 @@ fun HomeScreenPreview() {
     SmartHomeTheme {
         HomeScreen(
             state = HomeState(),
-            onEvent = { }
+            onEvent = { },
+            onNavigate = {  }
         )
     }
 }
